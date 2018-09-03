@@ -1,12 +1,12 @@
 import * as http from "http";
 import * as debug from "debug";
 
+require("dotenv").config();
 import Server from "./server";
 
 debug("ts-express:server");
 
-const port = normalizePort(process.env.PORT);
-Server.set("port", port);
+const port = normalizePort(process.env.PORT || 3000);
 
 console.log(`Server listening on port ${port}`);
 

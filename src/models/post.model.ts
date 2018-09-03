@@ -1,8 +1,6 @@
 import { Schema, model } from "mongoose";
 
 const postSchema: Schema = new Schema({
-  createdAt: Date,
-  updatedAt: Date,
   title: {
     type: String,
     default: "",
@@ -25,7 +23,11 @@ const postSchema: Schema = new Schema({
   featuredImage: {
     type: String,
     default: ""
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now
   }
 });
 
-export default model("postModel", postSchema);
+export default model("Post", postSchema);

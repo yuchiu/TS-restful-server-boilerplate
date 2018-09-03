@@ -6,9 +6,8 @@ import * as helmet from "helmet";
 import * as compression from "compression";
 import * as cors from "cors";
 
-//import routers
+import { PostController } from "./controllers";
 
-//Server class
 class Server {
   public app: express.Application;
   constructor() {
@@ -38,7 +37,7 @@ class Server {
     let router: express.Router;
     router = express.Router();
     this.app.use("/", router);
-    // this.app.use('/api/v1/posts',controller)
+    this.app.use("/api/v1/posts", PostController);
   }
 }
 

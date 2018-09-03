@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-let userSchema: Schema = new Schema({
+const userSchema: Schema = new Schema({
   createdAt: Date,
   updatedAt: Date,
   name: {

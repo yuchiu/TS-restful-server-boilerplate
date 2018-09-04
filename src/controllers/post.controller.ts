@@ -1,13 +1,9 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
+
 import { PostModel } from "../models/";
 
 class PostController {
-  router: Router;
-
-  constructor() {
-    this.router = Router();
-    this.routes();
-  }
+  constructor() {}
   public async getPosts(req: Request, res: Response): Promise<void> {
     try {
       const data = await PostModel.find({});
@@ -44,16 +40,18 @@ class PostController {
   }
 
   public async createPost(req: Request, res: Response): Promise<void> {
-    console.log(req.body);
     try {
-      const { title, content, featuredImage, slug } = req.body;
+      const title: string = req.body.title;
+      const content: string = req.body.content;
+      const slug: string = req.body.featuredImage;
+      const featuredImage: string = req.body.featuredImage;
+
       const postModel = new PostModel({
         title,
         content,
         featuredImage,
         slug
       });
-
       const data = await postModel.save();
       const status = res.statusCode;
       res.send({
@@ -103,17 +101,6 @@ class PostController {
       });
     }
   }
-
-  routes() {
-    this.router.post("/", this.createPost);
-    this.router.get("/", this.getPosts);
-    this.router.get("/:slug", this.getPost);
-    this.router.put("/:slug", this.updatePost);
-    this.router.delete("/:slug", this.deletePost);
-  }
 }
 
-const postController = new PostController();
-postController.routes();
-
-export default postController.router;
+export default new PostController();

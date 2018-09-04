@@ -7,7 +7,7 @@ import * as helmet from "helmet";
 import * as compression from "compression";
 import * as cors from "cors";
 
-import { PostController, UserController } from "./controllers";
+import { postRouter, userRouter } from "./routers";
 
 class Server {
   public app: express.Application;
@@ -19,8 +19,7 @@ class Server {
 
   public config() {
     //mongoose
-    const MONGO_URI = null;
-    mongoose.connect(MONGO_URI || process.env.MONGO_CLOUD_URI),
+    mongoose.connect(process.env.MONGO_CLOUD_URI),
       { useNewUrlParser: true },
       err => {
         if (err) {
@@ -56,11 +55,11 @@ class Server {
   }
 
   public routes(): void {
-    let router: express.Router;
-    router = express.Router();
+    const router: express.Router = express.Router();
+
     this.app.use("/", router);
-    this.app.use("/api/v1/posts", PostController);
-    this.app.use("/api/v1/users", UserController);
+    this.app.use("/api/v1/posts", postRouter);
+    this.app.use("/api/v1/users", userRouter);
   }
 }
 

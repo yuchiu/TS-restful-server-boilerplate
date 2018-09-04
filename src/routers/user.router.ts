@@ -13,6 +13,7 @@ class UserRouter {
     this.router.get("/", userController.getUsers);
     this.router.get("/:username", userController.getUser);
     this.router.post("/", userController.createUser);
+    this.router.post("/:username", userController.loginUser);
     this.router.put("/:username", userController.updateUser);
     this.router.delete("/:username", userController.deleteUser);
   }

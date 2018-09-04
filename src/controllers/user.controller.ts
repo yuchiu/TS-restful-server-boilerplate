@@ -14,17 +14,14 @@ interface User extends Document {
 class UserController {
   public async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      const data = await UserModel.find({});
-      const status = res.statusCode;
-      res.send({
-        status,
-        data
+      const userList = await UserModel.find({});
+      res.status(200).send({
+        userList
       });
     } catch (err) {
-      const status = res.statusCode;
-      res.send({
-        status,
-        err
+      console.log(err);
+      res.status(500).send({
+        error: `server error`
       });
     }
   }
@@ -32,17 +29,14 @@ class UserController {
   public async getUser(req: Request, res: Response): Promise<void> {
     try {
       const username: string = req.params.username;
-      const data = await UserModel.findOne({ username });
-      const status = res.statusCode;
-      res.send({
-        status,
-        data
+      const user = await UserModel.findOne({ username });
+      res.status(200).send({
+        user
       });
     } catch (err) {
-      const status = res.statusCode;
-      res.send({
-        status,
-        err
+      console.log(err);
+      res.status(500).send({
+        error: `server error`
       });
     }
   }
@@ -59,7 +53,7 @@ class UserController {
       if (isUsernameRegistered) {
         res.status(403).send({
           confirmation: false,
-          err: `username: ${credentials.username} is already registered`
+          error: `username: ${credentials.username} is already registered`
         });
       }
 
@@ -71,26 +65,22 @@ class UserController {
       if (isEmailRegistered) {
         res.status(403).send({
           confirmation: false,
-          err: `email: ${credentials.email} is already registered`
+          error: `email: ${credentials.email} is already registered`
         });
       }
 
-      /* hash password */
+      /* credential is validated */
       credentials.password = await bcrypt.hash(credentials.password, 10);
-
       const user = await UserModel.create(credentials);
-      const status = res.statusCode;
       const token = jwtSignUser(user);
-      res.send({
-        status,
+      res.status(200).send({
         user,
         token
       });
     } catch (err) {
-      const status = res.statusCode;
-      res.send({
-        status,
-        err
+      console.log(err);
+      res.status(500).send({
+        error: `server error`
       });
     }
   }
@@ -98,15 +88,13 @@ class UserController {
   public async loginUser(req: Request, res: Response): Promise<void> {
     try {
       const credentials: User = req.body;
-      const status = res.statusCode;
 
       const user = await UserModel.findOne({ username: credentials.username });
 
       /* user not registered */
       if (!user) {
-        res.send({
-          status,
-          err: `this account ${credentials.username} is not yet registered`
+        res.status(403).send({
+          error: `this account ${credentials.username} is not yet registered`
         });
       }
 
@@ -118,22 +106,19 @@ class UserController {
 
       /* invalid password */
       if (!isPasswordValid) {
-        res.send({
-          status,
-          err: `invalid password`
+        res.status(403).send({
+          error: `invalid password`
         });
       }
 
       /* password is validated */
-      res.send({
-        status,
+      res.status(200).send({
         user
       });
     } catch (err) {
-      const status = res.statusCode;
-      res.send({
-        status,
-        err
+      console.log(err);
+      res.status(500).send({
+        error: `server error`
       });
     }
   }
@@ -141,34 +126,28 @@ class UserController {
   public async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const username: string = req.params.username;
-      const data = await UserModel.findOneAndRemove({ username });
-      const status = res.statusCode;
-      res.send({
-        status,
-        data
+      const user = await UserModel.findOneAndRemove({ username });
+      res.status(200).send({
+        user
       });
     } catch (err) {
-      const status = res.statusCode;
-      res.send({
-        status,
-        err
+      console.log(err);
+      res.status(500).send({
+        error: `server error`
       });
     }
   }
   public async updateUser(req: Request, res: Response): Promise<void> {
     try {
       const username: string = req.params.username;
-      const data = await UserModel.findOneAndUpdate({ username }, req.body);
-      const status = res.statusCode;
-      res.send({
-        status,
-        data
+      const user = await UserModel.findOneAndUpdate({ username }, req.body);
+      res.status(200).send({
+        user
       });
     } catch (err) {
-      const status = res.statusCode;
-      res.send({
-        status,
-        err
+      console.log(err);
+      res.status(500).send({
+        error: `server error`
       });
     }
   }
